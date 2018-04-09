@@ -1,5 +1,6 @@
 #!/bin/bash
-set -e
+set -o errexit
+set -o nounset
 # This file recursively traverses a directory and replaces each
 # link by a copy of its target.
 
@@ -14,6 +15,13 @@ find -L "$1" -print0 |
         # symlink dereference) exists so that `realpath` does not fail.
         if [[ -e "$f" ]] && [[ -L "$f" ]]; then
             realf="$(realpath "$f")"
+            syml="$(ls -l $f | awk '{print $11}')"
+            reals="$(realpath "$syml")" || {
+                # there was an error while trying to get the real path of a symlink
+                # command failed, jump to next iteration without copy anything
+		echo -e "Symlink $syml has no real path. Proceeding with next file...\n"
+		continue
+	    }
             rm "$f"
             cp -r "$realf" "$f"
         fi

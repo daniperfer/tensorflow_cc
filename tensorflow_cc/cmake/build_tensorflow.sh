@@ -67,6 +67,7 @@ fi
 # configure and build
 ./configure
 bazel build -c opt \
+            --config=opt --copt=-mfpmath=both \
             $cuda_config_opts \
             --config=monolithic \
             tensorflow:libtensorflow_cc.so
