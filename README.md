@@ -128,6 +128,9 @@ int main()
 # CMakeLists.txt
 
 find_package(TensorflowCC REQUIRED)
+# Altenatively, if only shared library was built
+# find_package(TensorflowCC REQUIRED COMPONENTS Shared)
+
 add_executable(example example.cpp)
 
 # Link the static Tensorflow library.
